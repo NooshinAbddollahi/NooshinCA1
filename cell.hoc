@@ -4146,11 +4146,11 @@ channel_density_chanrhod=1.3e011
 
 proc celldef () {
   topol()
-  geom_nseg()
+  
   access soma
   distance()
     biophys()
-
+   geom_nseg()
 }
 
 
