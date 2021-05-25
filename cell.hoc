@@ -3855,8 +3855,7 @@ rel=0.5
 
 numbasal=70
 
-xopen("geo9068802.hoc")             // geometry file
-xopen("fixnseg.hoc")           
+        
 
 Rm = 35000
 Rm_node=1000
