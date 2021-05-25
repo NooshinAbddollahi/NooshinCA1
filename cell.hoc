@@ -17,17 +17,16 @@ create ais[1]
 create hill[1]
 
 
-public node[17]
-public MYSA[33]
-public FLUT[33]
-public STIN[17]
+public node
+public FLUT
+public STIN
 
-public soma[2]
-public dendrite[70]
-public apical_dendrite[31]
-public user5[38]
-public ais[1]
-public hill[1]
+public soma
+public dendrite
+public apical_dendrite
+public user5
+public ais
+public hill
 
 
 
