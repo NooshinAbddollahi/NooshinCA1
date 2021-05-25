@@ -3818,30 +3818,7 @@ proc basic_shape() {
 
 
 
-
-proc celldef () {
-  topol()
-  
-
-  
-
-}
-
-
-
-
-
-
-
-proc init() {
-
-
-celldef()
-
-
-	
-}
-
+func is_art() { return 0 }
 
 
 
