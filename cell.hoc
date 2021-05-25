@@ -3850,7 +3850,7 @@ proc geom_nseg() { local freq, d_lambda, before, after, tmp
 
 
 
-proc biophys() { 
+proc biophys() { local i
 
 dist=7
 rel=0.5
@@ -3913,7 +3913,7 @@ nl=15
 
 
 
-	for i=0,axonnodes-1 { local i
+	for i=0,axonnodes-1 { 
 		node[i]{					
 			nseg=1
 			diam=nodeD
@@ -3931,7 +3931,7 @@ nl=15
 			g_pas=0.001		
 			e_pas=-70
                        
-			insert extracellular xraxial=Rpn0 xg=1e10 xc=0
+			//insert extracellular xraxial=Rpn0 xg=1e10 xc=0
                         
 insert chanrhod
 channel_density_chanrhod=2e010
