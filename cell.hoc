@@ -40,16 +40,7 @@ connect soma[0](1) , soma[1](0)
 {hill[0] connect ais[0](0), 1}
 {ais[0] connect STIN[0](0), 1}
 
-for i=0, 15 {
 
-{STIN[i] connect FLUT[2*i](0), 1}
-{FLUT[2*i] connect MYSA[2*i](0), 1}
-{MYSA[2*i] connect node[i](0), 1}
-{node[i] connect  MYSA[2*i+1](0), 1}
-{MYSA[2*i+1] connect FLUT[2*i+1](0), 1}
-{FLUT[2*i+1] connect STIN[i+1](0), 1}
-
-}
 
 
 {soma[1] connect user5[0](0), 1}
