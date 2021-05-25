@@ -3913,8 +3913,8 @@ nl=15
 
 
 
-	for i=0,axonnodes-1 { 
-		node[i]{					
+	 
+		node[0]{					
 			nseg=1
 			diam=nodeD
 			L=nodelength
@@ -3931,13 +3931,13 @@ nl=15
 			g_pas=0.001		
 			e_pas=-70
                        
-			//insert extracellular xraxial=Rpn0 xg=1e10 xc=0
+			insert extracellular xraxial=Rpn0 xg=1e10 xc=0
                         
 insert chanrhod
 channel_density_chanrhod=2e010
 
 		}
-		}
+		
 
 
 
