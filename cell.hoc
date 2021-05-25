@@ -1,7 +1,7 @@
 
 
 begintemplate NooshinCA1PyramidalCell
-
+public is_art
 
 
 create node[17]
