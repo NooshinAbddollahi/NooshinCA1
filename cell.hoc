@@ -3925,7 +3925,7 @@ nl=15
                         insert Kv1  gbar_Kv1= 0.07      //0.07             
                         //insert kdr gkdrbar_kdr=0              //0.1
                         //insert kap gkabar_kap = ka                  //ka
-                        insert naxNN gbar_naxNN=gna*AXONM*3
+                        
                         //insert nap gnabar_nap= 0
                         insert pas
 			g_pas=0.001		
