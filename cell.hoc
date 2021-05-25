@@ -3850,12 +3850,296 @@ proc geom_nseg() { local freq, d_lambda, before, after, tmp
 
 
 
+proc biophys() { local i
+
+dist=7
+rel=0.5
+
+numbasal=70
+
+       
+
+Rm = 35000
+Rm_node=1000
+Cm    = 1
+
+RaAll= 150
+RaAx = 50
+
+Vrest = -70
+//dt = 0.1
+gna = 0.09                    // 0.065
+AXONM = 3
+gkdr =0.03          // original value 0.03
+celsius = 31.0  
+ka = 0.001                          //original value 0.001
+ghd=0.00000005
+gkm= 0.02            
+gcat= 0.0001
+gahp=0.00001
+
+//topological parameters//		
+	axonnodes=17  			
+	paranodes1=33
+	paranodes2=33	
+	axoninter=17
+
+
+//electrical parameters//		
+	rhoa=0.5e6 //Ohm-um//
+	mycm=0.1 //uF/cm2/lamella membrane//
+	mygm=0.001 //S/cm2/lamella membrane//
+
+
+
+paralength1=3  
+nodelength=1.0
+space_p1=0.0018  
+space_p2=0.008
+space_i=0.008
+fiberD=0.5
+axonD=0.334 
+nodeD=0.234
+paraD1=0.234
+paraD2=0.334
+paralength2=5
+interlength=83
+nl=15
+	
+	Rpn0=(rhoa*.01)/(PI*((((nodeD/2)+space_p1)^2)-((nodeD/2)^2)))
+	Rpn1=(rhoa*.01)/(PI*((((paraD1/2)+space_p1)^2)-((paraD1/2)^2)))
+	Rpn2=(rhoa*.01)/(PI*((((paraD2/2)+space_p2)^2)-((paraD2/2)^2)))
+	Rpx=(rhoa*.01)/(PI*((((axonD/2)+space_i)^2)-((axonD/2)^2)))
+
+
+
+	for i=0,axonnodes-1 {
+		node[i]{					
+			nseg=1
+			diam=nodeD
+			L=nodelength
+			Ra=50                          //rhoa/10000
+			cm=1
+			//insert axnode		
+			insert km gbar_km= 0.2               //0.2     
+                        insert Kv1  gbar_Kv1= 0.07      //0.07             
+                        //insert kdr gkdrbar_kdr=0              //0.1
+                        //insert kap gkabar_kap = ka                  //ka
+                        insert naxNN gbar_naxNN=gna*AXONM*3
+                        //insert nap gnabar_nap= 0
+                        insert pas
+			g_pas=0.001		
+			e_pas=-70
+                       
+			insert extracellular xraxial=Rpn0 xg=1e10 xc=0
+                        
+insert chanrhod
+channel_density_chanrhod=2e010
+
+		}
+		}
+
+
+	
+	for i=0, paranodes1-1 {
+		MYSA[i]{
+			nseg=1
+			diam=fiberD
+			L=paralength1
+			Ra=50            //rhoa*(1/(paraD1/fiberD)^2)/10000
+			cm=2*paraD1/fiberD
+			insert pas
+			g_pas=0.001*paraD1/fiberD		
+			e_pas=-70
+			insert extracellular xraxial=Rpn1 xg=mygm/(nl*2)    xc=mycm/(nl*2)
+insert km gbar_km= 0.0008        //0.015
+insert naxNN gbar_naxNN= 0.04                //0.04 
+//insert kdr gkdrbar_kdr= 0.01              //0.005
+insert Kv1  gbar_Kv1= 0.07         //0.07 
+insert chanrhod
+channel_density_chanrhod=2e010
+
+
+			}
+	}
+	for i=0, paranodes2-1 {
+		FLUT[i]{
+			nseg=1
+			diam=fiberD
+			L=paralength2
+			Ra=50                 //rhoa*(1/(paraD2/fiberD)^2)/10000
+			cm=2*paraD2/fiberD
+			insert pas
+			g_pas=0.0001*paraD2/fiberD 		
+			e_pas=-70
+			insert extracellular xraxial=Rpn2 xg=mygm/(nl*2)  xc=mycm/(nl*2)
+insert km gbar_km= 0.0008                       //0.015
+insert naxNN gbar_naxNN=0.04                   //0.04
+//insert kdr gkdrbar_kdr= 0.01                   //0.005
+insert Kv1  gbar_Kv1=0.2              //0.2
+insert chanrhod
+channel_density_chanrhod=2e010
+
+			}
+	}
+	for i=0, axoninter-1 {
+		STIN[i]{
+			nseg=1
+			diam=fiberD
+			L=interlength
+			Ra=50                  //rhoa*(1/(axonD/fiberD)^2)/10000
+			cm=2*axonD/fiberD
+			insert pas
+			g_pas=0.0001*axonD/fiberD
+			e_pas=-70
+			insert extracellular xraxial=Rpx xg=mygm/(nl*2)  xc=mycm/(nl*2)
+insert km gbar_km= 0.0008                        //0.0008
+insert naxNN gbar_naxNN= 0.04                  //0.04
+//insert kdr gkdrbar_kdr=0.01                         //0.005
+insert Kv1  gbar_Kv1= 0.08                       //0.08 
+insert chanrhod
+channel_density_chanrhod=2e010
+
+			}
+	}
+
+
+forsec "hill" {insert pas e_pas=Vrest g_pas=1/Rm  Ra=RaAll cm=Cm}                        //1/Rm
+forsec "ais" {insert pas e_pas=Vrest g_pas =1/Rm  Ra=RaAx cm=Cm}
+forsec "soma" {insert pas e_pas=Vrest g_pas =1/Rm  Ra=RaAll cm=Cm}
+forsec "dendrite"{insert pas e_pas=Vrest g_pas =1/Rm Ra=RaAll cm=Cm}
+forsec "user5" {insert pas e_pas=Vrest g_pas =1/Rm Ra=RaAll cm=Cm}
+
+               
+
+forsec "hill" {   
+		insert km gbar_km= 0            //0.02           //0.2                                
+                insert na3 gbar_na3=gna*AXONM                                       //gna*AXONM
+                insert kdr gkdrbar_kdr=0.001               //gkdr
+
+//insert Kv1  gbar_Kv1= 0
+insert chanrhod
+channel_density_chanrhod=1.3e011
+
+                                             
+}
+
+
+forsec "ais" {   
+		insert km gbar_km= 0.04              //0.04                               
+                insert nax gbar_nax= gna*AXONM*13
+                insert kdr gkdrbar_kdr=0.001               //gkdr
+
+
+insert Kv1  gbar_Kv1= 0
+
+insert chanrhod
+channel_density_chanrhod=1.3e011
+
+                                           
+}
+
+
+
+
+
+forsec "soma" {  
+		insert km gbar_km=0          //gkm
+		insert hd ghdbar_hd=0	
+                insert na3 gbar_na3=gna*AXONM             //gna*AXONM
+                insert kdr gkdrbar_kdr= 0.001                //gkdr
+                insert kap gkabar_kap = ka
+                insert cat  gcatbar_cat=gcat
+		insert cacum tau_cacum=100 depth_cacum=diam/2
+		insert KahpM95 gbar_KahpM95 = gahp
+ 
+//insert Kv1  gbar_Kv1= 0
+
+insert chanrhod
+channel_density_chanrhod=1.3e011
+
+ 
+                
+}
+
+
+
+
+
+
+for i=0, numbasal-1 dendrite[i] {
+                insert na3 gbar_na3=0
+                insert cat  gcatbar_cat=gcat
+		insert cacum tau_cacum=100 depth_cacum=diam/2
+		insert KahpM95 gbar_KahpM95 = gahp 
+insert chanrhod
+channel_density_chanrhod=1.3e011
+}
+
+                
+forsec "apical_dendrite" {
+		insert hd ghdbar_hd=ghd	
+                insert na3 gbar_na3=0.02
+                insert kdr gkdrbar_kdr=gkdr
+		insert kap gkabar_kap=0
+		insert kad gkabar_kad=0
+		insert cacum tau_cacum=100 depth_cacum=diam/2
+		insert KahpM95 gbar_KahpM95 = gahp 
+                insert cat  gcatbar_cat=gcat
+insert chanrhod
+channel_density_chanrhod=1.3e011
+
+		for (x,0) { xdist = distance(x)
+                	ghdbar_hd(x) = ghd*(1+3*xdist/100)
+                		if (xdist > 100){
+                        		gkabar_kad(x) = ka*(1+xdist/100)
+                			} else {
+                        		gkabar_kap(x) = ka*(1+xdist/100)
+               				}
+		}
+}
+
+forsec "user5" {
+		insert hd ghdbar_hd=ghd	
+                insert na3 gbar_na3=0.02
+                insert kdr gkdrbar_kdr=gkdr
+		insert kap gkabar_kap=0
+		insert kad gkabar_kad=0
+		insert cacum tau_cacum=100 depth_cacum=diam/2
+                insert cat  gcatbar_cat=gcat
+		insert KahpM95 gbar_KahpM95 = gahp 
+insert chanrhod
+channel_density_chanrhod=1.3e011
+
+
+		for (x,0) { xdist = distance(x)
+                	ghdbar_hd(x) = ghd*(1+3*xdist/100)
+                		if (xdist > 100){
+                        		gkabar_kad(x) = ka*(1+xdist/100)
+                			} else {
+                        		gkabar_kap(x) = ka*(1+xdist/100)
+               				}
+		}
+}
+
+
+
+
+
+}
+
+
+
+
+
+
+
 proc celldef () {
   topol()
   geom_nseg()
   access soma
   distance()
-   
+    biophys()
 
 }
 
