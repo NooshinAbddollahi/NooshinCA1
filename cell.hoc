@@ -3850,7 +3850,7 @@ proc geom_nseg() { local freq, d_lambda, before, after, tmp
 
 
 
-proc biophys() { local i,x
+proc biophys() { 
 
 dist=7
 rel=0.5
@@ -3913,7 +3913,7 @@ nl=15
 
 
 
-	for i=0,axonnodes-1 {
+	for i=0,axonnodes-1 { local i
 		node[i]{					
 			nseg=1
 			diam=nodeD
