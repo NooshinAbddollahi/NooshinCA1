@@ -3850,7 +3850,7 @@ proc geom_nseg() { local freq, d_lambda, before, after, tmp
 
 
 
-proc biophys() { local i
+proc biophys() { local i,x
 
 dist=7
 rel=0.5
