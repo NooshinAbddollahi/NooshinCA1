@@ -29,8 +29,7 @@ public user5[38]
 public ais[1]
 public hill[1]
 
-access soma
-distance()
+
 
 
 proc topol() { local i
